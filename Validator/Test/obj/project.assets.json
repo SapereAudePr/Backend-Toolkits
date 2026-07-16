@@ -930,39 +930,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\38125\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/melihozyesil/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\38125\\Desktop\\BackendToolkits\\Validator\\Test\\Test.csproj",
+      "projectUniqueName": "/home/melihozyesil/Desktop/BackendToolkitsClone/Validator/Test/Test.csproj",
       "projectName": "Test",
-      "projectPath": "C:\\Users\\38125\\Desktop\\BackendToolkits\\Validator\\Test\\Test.csproj",
-      "packagesPath": "C:\\Users\\38125\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\38125\\Desktop\\BackendToolkits\\Validator\\Test\\obj\\",
+      "projectPath": "/home/melihozyesil/Desktop/BackendToolkitsClone/Validator/Test/Test.csproj",
+      "packagesPath": "/home/melihozyesil/.nuget/packages/",
+      "outputPath": "/home/melihozyesil/Desktop/BackendToolkitsClone/Validator/Test/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\38125\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/melihozyesil/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\38125\\Desktop\\BackendToolkits\\Validator\\Validation\\Validation.csproj": {
-              "projectPath": "C:\\Users\\38125\\Desktop\\BackendToolkits\\Validator\\Validation\\Validation.csproj"
+            "/home/melihozyesil/Desktop/BackendToolkitsClone/Validator/Validation/Validation.csproj": {
+              "projectPath": "/home/melihozyesil/Desktop/BackendToolkitsClone/Validator/Validation/Validation.csproj"
             }
           }
         }
@@ -977,7 +970,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
@@ -1016,7 +1009,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/home/melihozyesil/.dotnet/sdk/10.0.302/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
