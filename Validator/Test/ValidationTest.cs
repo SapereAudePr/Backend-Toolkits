@@ -365,8 +365,8 @@ public class ValidationTest(ITestOutputHelper output)
     public void Matches_WhenValid_DoesNotAddError()
     {
         var validation = new Validator<Person>(new Person("John", 271))
-            .RuleFor("Age", x => x.Age)
-            .Matches(@"^d\d{3}")
+            .RuleFor("Name", x => x.Name)
+            .Matches(@"^J\w+")
             .Validate();
 
         output.WriteLine(string.Join(Environment.NewLine, validation.Errors));

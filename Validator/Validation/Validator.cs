@@ -58,33 +58,33 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
-    public PropertyValidator<T, TProp> Min(int min)
+    public PropertyValidator<T, TProp> Min(TProp min)
     {
-        if (value is int i && i < min)
+        if (value is IComparable<TProp> comparable && comparable.CompareTo(min) < 0)
             parent.AddError(field, $"{field} can not be lower than {min}");
 
         return this;
     }
 
-    public PropertyValidator<T, TProp> Max(int max)
+    public PropertyValidator<T, TProp> Max(TProp max)
     {
-        if (value is int i && i > max)
+        if (value is IComparable<TProp> comparable && comparable.CompareTo(max) > 0)
             parent.AddError(field, $"{field} can not be higher than {max}");
 
         return this;
     }
 
-    public PropertyValidator<T, TProp> LessThan(int flagNumber)
+    public PropertyValidator<T, TProp> LessThan(TProp flagNumber)
     {
-        if (value is int i && i >= flagNumber)
+        if (value is IComparable<TProp> comparable && comparable.CompareTo(flagNumber) >= 0)
             parent.AddError(field, $"{field} must be lower than {flagNumber}");
 
         return this;
     }
 
-    public PropertyValidator<T, TProp> GreaterThan(int flagNumber)
+    public PropertyValidator<T, TProp> GreaterThan(TProp flagNumber)
     {
-        if (value is int i && i <= flagNumber)
+        if (value is IComparable<TProp> comparable && comparable.CompareTo(flagNumber) <= 0)
             parent.AddError(field, $"{field} must be greater than {flagNumber}");
 
         return this;
@@ -119,7 +119,7 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         var pattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
 
         if (value is string s && !Regex.IsMatch(s, pattern))
-            parent.AddError(field, $"{value} is not a valid email address");
+            parent.AddError(field, $"{field} is not a valid email address");
 
         return this;
     }
