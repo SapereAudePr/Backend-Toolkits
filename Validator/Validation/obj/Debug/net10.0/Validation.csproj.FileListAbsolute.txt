@@ -1,0 +1,12 @@
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\bin\Debug\net10.0\Validation.deps.json
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\bin\Debug\net10.0\Validation.dll
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\bin\Debug\net10.0\Validation.pdb
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.AssemblyInfoInputs.cache
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.AssemblyInfo.cs
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.csproj.CoreCompileInputs.cache
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.sourcelink.json
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.dll
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\refint\Validation.dll
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\Validation.pdb
+C:\Users\38125\Desktop\BackendToolkits\Validator\Validation\obj\Debug\net10.0\ref\Validation.dll

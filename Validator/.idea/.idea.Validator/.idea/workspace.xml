@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f2ce908b-f409-4a7f-b011-39dad5581c0d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Validation/Validator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Validation/Validator.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SapereAudePr"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/SapereAudePr/Backend-Toolkits.git",
+    "accountId": "e2fd8168-0f32-4a72-8eb8-72a857e17608"
+  }
+}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Validator/Validator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ValidatorProject/Class1.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="2.52256393146135E-18" />
+      <entry key="MS500" value="4.4892037968734136E-4" />
+      <entry key="S2" value="0.4906350899464757" />
+      <entry key="S5" value="2.301654023925103" />
+      <entry key="S10" value="3.9839920201678547" />
+      <entry key="S30" value="7.7494819488288655" />
+      <entry key="S60" value="15.853517324456272" />
+      <entry key="M2" value="32.478990691193964" />
+      <entry key="M5" value="78.34367801225503" />
+      <entry key="M10" value="152.978227435424" />
+      <entry key="M15" value="223.41683172259968" />
+      <entry key="M30" value="377.14544664464154" />
+      <entry key="H1" value="524.0454164311636" />
+      <entry key="H2" value="628.9559234224912" />
+      <entry key="H4" value="692.1624561268562" />
+      <entry key="D1" value="751.3741278295462" />
+      <entry key="W1" value="762.1795618164575" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0000002678632505" />
+      <entry key="S2" value="1.0227498367044174" />
+      <entry key="S5" value="1.2202061452656388" />
+      <entry key="S10" value="1.4758503161328567" />
+      <entry key="S30" value="2.348134881618317" />
+      <entry key="S60" value="4.0360602496951925" />
+      <entry key="M2" value="7.649159291014309" />
+      <entry key="M5" value="20.045234834995885" />
+      <entry key="M10" value="36.84077110945664" />
+      <entry key="M15" value="48.50864592135278" />
+      <entry key="M30" value="67.55001344705917" />
+      <entry key="H1" value="81.79243108751875" />
+      <entry key="H2" value="90.65826147910347" />
+      <entry key="H4" value="95.62728787340573" />
+      <entry key="D1" value="100.07489453872836" />
+      <entry key="W1" value="100.86709367775651" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="2.579385934413765E-14" />
+      <entry key="MS500" value="0.002281495599985692" />
+      <entry key="S2" value="0.693519286556558" />
+      <entry key="S5" value="2.9666996007714497" />
+      <entry key="S10" value="5.093741275733244" />
+      <entry key="S30" value="9.896288949397908" />
+      <entry key="S60" value="19.71038740153297" />
+      <entry key="M2" value="39.96375778126578" />
+      <entry key="M5" value="98.22907460157464" />
+      <entry key="M10" value="189.66085129804796" />
+      <entry key="M15" value="271.7771445958459" />
+      <entry key="M30" value="444.58209035261115" />
+      <entry key="H1" value="605.7652480064824" />
+      <entry key="H2" value="719.5727200913516" />
+      <entry key="H4" value="787.7675332474179" />
+      <entry key="D1" value="851.4450971420792" />
+      <entry key="W1" value="863.0460890229023" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3GRxOXu8va1w4awXmliWVpuqAfo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortKey" value="BY_TIME_DESCENDING" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f2ce908b-f409-4a7f-b011-39dad5581c0d" name="Changes" comment="" />
+      <created>1783948151871</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1783948151871</updated>
+      <workItem from="1783948153059" duration="4028000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

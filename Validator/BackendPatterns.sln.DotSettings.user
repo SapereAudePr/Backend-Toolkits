@@ -1,0 +1,34 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ff0d31cd_002Dc3aa_002D4843_002Da979_002De01b71fa186c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NotEmpty_WhenEmpty_AddsError" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.NotEmpty_WhenEmpty_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.NotEmpty_WhenNotEmpty_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.NotNull_WhenNull_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Must_WhenDoesNotMetRules_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Must_WhenMetRules_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.MinLength_WhenLowerThanMin_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.MinLength_WhenLimitNotExceeded_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.MaxLength_WhenHigherThanMax_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.MaxLength_WhenLowerThanMax_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Min_WhenLowerThanMin_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.MinLength_WhenHigherThanMin_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Min_WhenHigherThanMin_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Max_WhenHigherThanMax_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Max_WhenLowerThanMax_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Equal_WhenNotEqual_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Equal_WhenEqual_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.NotEqual_WhenEqual_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.NotEqual_WhenNotEqual_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.EmailAddress_WhenNotValid_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.EmailAddress_WhenValid_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Matches_WhenNotValid_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.Matches_WhenValid_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.GreaterThan_WhenLower_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.GreaterThan_WhenGreater_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.LessThan_WhenGreater_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.LessThan_WhenLower_DoesNotAddError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.ValidationTest_WhenAllFieldsInvalid_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.ValidationTest_WhenMultipleFieldsInvalid_AddsError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::4E96243E-8688-40A1-94F7-2E340455909E::net10.0::Test.ValidationTest.ValidationTest_WhenAllFieldsValid_DoesNotAddError&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
