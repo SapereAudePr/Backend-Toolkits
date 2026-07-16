@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Validation;
 
@@ -12,6 +10,24 @@ public record ValidationResult(bool IsValid, IReadOnlyList<ValidationError> Erro
         new(true, []);
 }
 
+/// <summary>
+/// Provides the entry point for building a chain of validation rules for
+/// <typeparamref name="T"/>.
+/// </summary>
+/// <typeparam name="T">The type of object to validate.</typeparam>
+/// <param name="subject">The object instance to validate.</param>
+/// <example>
+/// <code>
+/// var result = new Validator&lt;Person&gt;(new Person("John", 25))
+///     .RuleFor("Name", person => person.Name)
+///     .NotNull()
+///     .MinLength(2)
+///     .RuleFor("Age", person => person.Age)
+///     .Min(1)
+///     .GreaterThan(12)
+///     .Validate();
+/// </code>
+/// </example>
 public class Validator<T>(T subject)
 {
     private readonly List<ValidationError> _errors = [];
@@ -26,6 +42,18 @@ public class Validator<T>(T subject)
         _errors.Count == 0 ? ValidationResult.Success() : new ValidationResult(false, _errors);
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <remarks>
+/// Rules can only work for two types: <see cref="string"/> or <see cref="IComparable{T}"/>
+/// while other types than those simply no-op
+/// </remarks>
+/// <param name="parent"></param>
+/// <param name="field"></param>
+/// <param name="value"></param>
+/// <typeparam name="T"></typeparam>
+/// <typeparam name="TProp"></typeparam>
 public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TProp value)
 {
     public PropertyValidator<T, TProp> NotEmpty()
@@ -60,6 +88,12 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Validates a value against a minimum threshold using <see cref="IComparable{T}"/>.
+    /// Adds a validation error if the value is lower than <paramref name="min"/>.
+    /// </summary>
+    /// <param name="min">The minimum allowed value, inclusive.</param>
+    /// <returns>The current <see cref="PropertyValidator{T, TProp}"/> instance, for chaining.</returns>
     public PropertyValidator<T, TProp> Min(TProp min)
     {
         if (value is IComparable<TProp> comparable && comparable.CompareTo(min) < 0)
@@ -136,8 +170,6 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
 
     public PropertyValidator<T, TNextProp> RuleFor<TNextProp>(string fieldName, Func<T, TNextProp> selector) =>
         parent.RuleFor(fieldName, selector);
-
-    // Clone Test
 
     public ValidationResult Validate() =>
         parent.Validate();
