@@ -1,0 +1,53 @@
+## .NET build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Rr]elease/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+## NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+## Rider/ReSharper
+_ReSharper*/
+*.[Rr]esharper
+*.DotSettings.user
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Publish output
+[Pp]ublish/
+*.pubxml
+*.publishproj
+
+## Misc
+*.log
+*.tmp
