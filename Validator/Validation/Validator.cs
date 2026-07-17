@@ -43,19 +43,27 @@ public class Validator<T>(T subject)
 }
 
 /// <summary>
-/// 
+/// Provides chainable rules for a single field of type <see cref="TProp"/>
 /// </summary>
 /// <remarks>
 /// Rules can only work for two types: <see cref="string"/> or <see cref="IComparable{T}"/>
 /// while other types than those simply no-op
 /// </remarks>
-/// <param name="parent"></param>
-/// <param name="field"></param>
-/// <param name="value"></param>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="TProp"></typeparam>
+/// <param name="parent">The parent <see cref="Validator{T}"/> which holds accumulated errors</param>
+/// <param name="field">The display name of the field, only used in error messages</param>
+/// <param name="value">Value of the field, <see cref="TProp"/> taken from <see cref="RuleFor"/></param>
+/// <typeparam name="T">The type of the object being validated</typeparam>
+/// <typeparam name="TProp">The type of the field being validated</typeparam>
 public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TProp value)
 {
+    
+    /// <summary>
+    /// Adds error if the value is <see langword="null"/> or empty
+    /// </summary>
+    /// <remarks>Only works with strings otherwise no-op</remarks>
+    /// <returns>
+    /// The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining
+    /// </returns>
     public PropertyValidator<T, TProp> NotEmpty()
     {
         if (value is string s && string.IsNullOrEmpty(s))
@@ -64,6 +72,11 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value is <see langword="null"/>
+    /// </summary>
+    /// <remarks>Only works with strings otherwise no-op</remarks>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> NotNull()
     {
         if (value is null)
@@ -72,6 +85,12 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value <see langword="string"/> is shorter than <paramref name="min"/>
+    /// </summary>
+    /// <param name="min">The minimum amount of the string allowed, inclusive</param>
+    /// <remarks>Only works with strings otherwise no-op</remarks>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> MinLength(int min)
     {
         if (value is string s && s.Length < min)
@@ -80,6 +99,12 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value <see langword="string"/> is higher than <paramref name="max"/>
+    /// </summary>
+    /// <param name="max">The maximum amount of the string allowed, inclusive</param>
+    /// <remarks>Only works with strings otherwise no-op</remarks>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> MaxLength(int max)
     {
         if (value is string s && s.Length > max)
@@ -92,6 +117,7 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
     /// Validates a value against a minimum threshold using <see cref="IComparable{T}"/>.
     /// Adds a validation error if the value is lower than <paramref name="min"/>.
     /// </summary>
+    /// <remarks>Only works with <see cref="IComparable{T}"/> types of values otherwise no-op</remarks>
     /// <param name="min">The minimum allowed value, inclusive.</param>
     /// <returns>The current <see cref="PropertyValidator{T, TProp}"/> instance, for chaining.</returns>
     public PropertyValidator<T, TProp> Min(TProp min)
@@ -102,6 +128,13 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Validates a value against a maximum threshold using <see cref="PropertyValidator{T, TProp}"/>
+    /// Adds error if the value is higher than <paramref name="max"/>
+    /// </summary>
+    /// <remarks>Only works with <see cref="IComparable{T}"/> types of values otherwise no-op</remarks>
+    /// <param name="max">The maximum allowed value, inclusive</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> Max(TProp max)
     {
         if (value is IComparable<TProp> comparable && comparable.CompareTo(max) > 0)
@@ -110,6 +143,12 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value <see cref="IComparable{T}"/> is higher than <paramref name="flagNumber"/>
+    /// </summary>
+    /// <remarks>Only works with <see cref="IComparable{T}"/> types of values otherwise no-op</remarks>
+    /// <param name="flagNumber">The peak number of the value must fall under, exclusive</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> LessThan(TProp flagNumber)
     {
         if (value is IComparable<TProp> comparable && comparable.CompareTo(flagNumber) >= 0)
@@ -118,6 +157,12 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value <see cref="IComparable{T}"/> is lesser than <paramref name="flagNumber"/>
+    /// </summary>
+    /// <remarks>Only works with type of <see cref="IComparable{T}"/> otherwise no-op</remarks>
+    /// <param name="flagNumber">The minimum number of the value <see cref="IComparable{T}"/> must exceed, exclusive</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> GreaterThan(TProp flagNumber)
     {
         if (value is IComparable<TProp> comparable && comparable.CompareTo(flagNumber) <= 0)
@@ -126,6 +171,11 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value is not equal to <paramref name="expected"/>
+    /// </summary>
+    /// <param name="expected">The value of which expected to be equal</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> Equal(TProp expected)
     {
         if (!EqualityComparer<TProp>.Default.Equals(value, expected))
@@ -134,6 +184,11 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value is equal to <paramref name="notExpected"/>
+    /// </summary>
+    /// <param name="notExpected">The value of which not expected to be equal</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> NotEqual(TProp notExpected)
     {
         if (EqualityComparer<TProp>.Default.Equals(value, notExpected))
@@ -142,6 +197,13 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the given predicate returns <see langword="false"/>
+    /// </summary>
+    /// <param name="rule">The predicate which returns <see langword="true"/> when the value is valid</param>
+    /// <param name="errorDescription">
+    /// An optional error message if the predicate fails, if ommitted gives a generic one</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> Must(Func<TProp, bool> rule, string? errorDescription = null)
     {
         if (!rule(value))
@@ -150,6 +212,11 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if value <see langword="string"/> doesn't match the built-in pattern
+    /// </summary>
+    /// <remarks>Only works with <see langword="string"/> otherwise no-op</remarks>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> EmailAddress()
     {
         var pattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
@@ -160,6 +227,13 @@ public class PropertyValidator<T, TProp>(Validator<T> parent, string field, TPro
         return this;
     }
 
+    /// <summary>
+    /// Adds error if the value <see cref="string"/> doesn't match given <paramref name="pattern"/>
+    /// </summary>
+    /// <remarks>Only works with strings otherwise no-op</remarks>
+    /// <param name="pattern">A <see cref="Regex"/> pattern for the value to match</param>
+    /// <param name="errorMessage">An optional error message if pattern is fails, if omitted gives a generic one</param>
+    /// <returns>The current instance of <see cref="PropertyValidator{T,TProp}"/> for chaining</returns>
     public PropertyValidator<T, TProp> Matches(string pattern, string? errorMessage = null)
     {
         if (value is string s && !Regex.IsMatch(s, pattern))
