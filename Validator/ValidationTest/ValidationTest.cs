@@ -1,7 +1,7 @@
 ﻿using Validation;
 using Xunit.Abstractions;
 
-namespace Test;
+namespace ValidationTest;
 
 internal record Person(string Name, int Age);
 

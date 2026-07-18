@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation.csproj", "{9673590E-D273-466F-B8C0-56136C289474}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{4E96243E-8688-40A1-94F7-2E340455909E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationTest", "ValidationTest\ValidationTest.csproj", "{4E96243E-8688-40A1-94F7-2E340455909E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
