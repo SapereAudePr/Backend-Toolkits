@@ -20,28 +20,11 @@ public class Program
             app.MapOpenApi();
         }
 
-        app.MapGet("/error", () => { throw new NoEntityFoundException("Error Testing"); });
+        app.MapGet("/not-found", () => { throw new NoEntityFoundException("Something was not found"); });
         app.MapGet("/bad-request", () => { throw new ArgumentException("Something was invalid"); });
-        // app.MapGet("/error", () => "TEST");
+        app.MapGet("/success", () => "TEST");
 
-        app.Use(async (context, next) =>
-        {
-            try
-            {
-                await next(context);
-            }
-            catch (Exception ex)
-            {
-                context.Response.StatusCode = ex switch
-                {
-                    ArgumentException => StatusCodes.Status400BadRequest,
-                    NoEntityFoundException => StatusCodes.Status404NotFound,
-                    _ => StatusCodes.Status500InternalServerError
-                };
-
-                await context.Response.WriteAsync(ex.Message);
-            }
-        });
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 
