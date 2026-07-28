@@ -1,4 +1,8 @@
-﻿namespace MiddlewareDemo;
+﻿using System.Text.Json;
+
+namespace MiddlewareDemo;
+
+public record ErrorResponse(string Message, int StatusCode, DateTimeOffset TimeStamp);
 
 public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
@@ -10,14 +14,28 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         }
         catch (Exception ex)
         {
-            context.Response.StatusCode = ex switch
+            var statusCode = ex switch
             {
                 NoEntityFoundException => StatusCodes.Status404NotFound,
                 ArgumentException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            await context.Response.WriteAsync(ex.Message);
+            context.Response.StatusCode = statusCode;
+            context.Response.ContentType = "application/json";
+
+            var response = new ErrorResponse(
+                ex.Message,
+                statusCode,
+                DateTime.UtcNow
+            );
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            await context.Response.WriteAsJsonAsync(response, options);
         }
     }
 }
