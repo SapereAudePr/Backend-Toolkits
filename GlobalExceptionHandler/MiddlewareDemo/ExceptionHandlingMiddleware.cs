@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace MiddlewareDemo;
-
-public record ErrorResponse(string Message, int StatusCode, DateTimeOffset TimeStamp);
 
 public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
@@ -24,18 +24,27 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
 
-            var response = new ErrorResponse(
-                ex.Message,
-                statusCode,
-                DateTime.UtcNow
-            );
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
 
-            await context.Response.WriteAsJsonAsync(response, options);
+            var details = new ProblemDetails
+            {
+                Detail = ex.Message,
+                Status = statusCode,
+                Title = ReasonPhrases.GetReasonPhrase(statusCode),
+                Type = $"https://httpstatuses.com/{statusCode}",
+                Instance = context.Request.Path,
+                Extensions =
+                {
+                    ["traceId"] = context.TraceIdentifier,
+                    ["timestamp"] = DateTime.UtcNow
+                }
+            };
+
+            await context.Response.WriteAsJsonAsync(details, options);
         }
     }
 }
