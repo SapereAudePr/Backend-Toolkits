@@ -1,10 +1,8 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace MiddlewareDemo;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next)
+public class ExceptionHandlingMiddleware(RequestDelegate next, IProblemDetailsService problemDetailsService)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -14,37 +12,28 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
         }
         catch (Exception ex)
         {
-            var statusCode = ex switch
+            var (statusCode, detail) = ex switch
             {
-                NoEntityFoundException => StatusCodes.Status404NotFound,
-                ArgumentException => StatusCodes.Status400BadRequest,
-                _ => StatusCodes.Status500InternalServerError
+                NoEntityFoundException => (StatusCodes.Status404NotFound, ex.Message),
+                ArgumentException => (StatusCodes.Status400BadRequest, ex.Message),
+                _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred")
             };
 
             context.Response.StatusCode = statusCode;
-            context.Response.ContentType = "application/json";
 
-
-            var options = new JsonSerializerOptions
+            await problemDetailsService.WriteAsync(new ProblemDetailsContext
             {
-                WriteIndented = true
-            };
-
-            var details = new ProblemDetails
-            {
-                Detail = ex.Message,
-                Status = statusCode,
-                Title = ReasonPhrases.GetReasonPhrase(statusCode),
-                Type = $"https://httpstatuses.com/{statusCode}",
-                Instance = context.Request.Path,
-                Extensions =
+                HttpContext = context,
+                ProblemDetails = new ProblemDetails
                 {
-                    ["traceId"] = context.TraceIdentifier,
-                    ["timestamp"] = DateTime.UtcNow
+                    Status = statusCode,
+                    Detail = detail,
+                    Extensions =
+                    {
+                        ["timestamp"] = DateTime.UtcNow
+                    }
                 }
-            };
-
-            await context.Response.WriteAsJsonAsync(details, options);
+            });
         }
     }
 }

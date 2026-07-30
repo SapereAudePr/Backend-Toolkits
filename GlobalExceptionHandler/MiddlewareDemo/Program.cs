@@ -12,6 +12,8 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
+        builder.Services.AddProblemDetails();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -20,15 +22,19 @@ public class Program
             app.MapOpenApi();
         }
 
-        app.MapGet("/not-found", () => { throw new NoEntityFoundException("Something was not found"); });
-        app.MapGet("/bad-request", () => { throw new ArgumentException("Something was invalid"); });
-        app.MapGet("/success", () => "TEST");
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+
+        app.MapGet("/not-found", () => { throw new NoEntityFoundException("Something was not found"); });
+        app.MapGet("/bad-request", () => { throw new ArgumentException("Something was invalid"); });
+        app.MapGet("server-error", () => { throw new Exception();});
+        app.MapGet("/success", () => "TEST");
+
 
         app.Run();
     }
