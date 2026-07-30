@@ -2,7 +2,10 @@
 
 namespace MiddlewareDemo;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next, IProblemDetailsService problemDetailsService)
+public class ExceptionHandlingMiddleware(
+    RequestDelegate next,
+    IProblemDetailsService problemDetailsService,
+    ILogger<ExceptionHandlingMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -12,6 +15,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, IProblemDetailsSe
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "An unhandled exception occurred");
+            
             var (statusCode, detail) = ex switch
             {
                 NoEntityFoundException => (StatusCodes.Status404NotFound, ex.Message),
