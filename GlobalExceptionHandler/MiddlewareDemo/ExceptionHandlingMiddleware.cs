@@ -2,7 +2,7 @@
 
 namespace MiddlewareDemo;
 
-public class ExceptionHandlingMiddleware(
+public abstract class ExceptionHandlingMiddleware(
     RequestDelegate next,
     IProblemDetailsService problemDetailsService,
     ILogger<ExceptionHandlingMiddleware> logger)
