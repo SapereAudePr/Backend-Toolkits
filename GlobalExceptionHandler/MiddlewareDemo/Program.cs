@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Diagnostics;
-
 namespace MiddlewareDemo;
 
 public class Program
@@ -8,7 +6,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        // builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddExceptionHandler<AppExceptionHandler>();
+        builder.Services.AddExceptionHandler<FallbackExceptionHandler>();
+
 
         // Add services to the container.
         builder.Services.AddAuthorization();
@@ -25,7 +26,7 @@ public class Program
         {
             app.MapOpenApi();
         }
-        
+
         app.UseExceptionHandler();
 
         app.UseHttpsRedirection();

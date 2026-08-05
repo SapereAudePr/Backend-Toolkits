@@ -14,8 +14,7 @@ public class GlobalExceptionHandler(
 
         var (statusCode, detail) = ex switch
         {
-            ArgumentException => (StatusCodes.Status400BadRequest, ex.Message),
-            NoEntityFoundException => (StatusCodes.Status404NotFound, ex.Message),
+            AppException appException => (appException.StatusCode, appException.Message),
             _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred. Please try again later.")
         };
 
