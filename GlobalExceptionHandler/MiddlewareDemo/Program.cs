@@ -6,7 +6,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // It won't be invoked since not injected to the DependencyContainer
+        // I kept it to reference as an alternative version
         // builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        // Order matters. Register the fallback handler last;
+        // otherwise, every exception will be handled as a 500 Internal Server Error.
         builder.Services.AddExceptionHandler<AppExceptionHandler>();
         builder.Services.AddExceptionHandler<FallbackExceptionHandler>();
 
