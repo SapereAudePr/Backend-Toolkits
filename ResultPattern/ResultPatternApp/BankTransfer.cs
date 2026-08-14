@@ -1,24 +1,31 @@
 ﻿namespace ResultPatternApp;
 
-public class BankTransfer(decimal balance)
+public class BankTransfer
 {
-    private decimal _balance = balance;
+    private decimal Balance { get; set; }
 
-    public Result TryWithdraw(decimal amount)
+    public Result<BankTransfer> TryOpenAccount(decimal initialDeposit)
     {
-        if (amount <= 0)
-        {
-            return Result.Failure("amount", "There's not enough balance");
-        }
+        if (initialDeposit < 0)
+            return Result<BankTransfer>.Failure([
+                new ErrorMessage("initialDeposit", "Initial deposit can not be lower than 0")
+            ]);
 
-        if (amount > _balance)
-        {
-            return Result.Failure("amount",
-                $"Withdraw failed: requested amount {amount:C}, but the available balance is {_balance:C}.");
-        }
+        Balance = initialDeposit;
 
-        _balance -= amount;
-        Console.WriteLine($"Withdraw amount {amount} and the remaining balance is {_balance}");
-        return Result.Success();
+        return Result<BankTransfer>.Success(this);
+    }
+
+    public Result<BankTransfer> TryWithdraw(decimal amount)
+    {
+        if (amount > Balance)
+            return Result<BankTransfer>.Failure
+                ([new ErrorMessage("amount", "There's not enough balance")]);
+
+        Balance -= amount;
+
+        Console.WriteLine($"{amount} has been withdrawn, current balance: {Balance}");
+        
+        return Result<BankTransfer>.Success(this);
     }
 }

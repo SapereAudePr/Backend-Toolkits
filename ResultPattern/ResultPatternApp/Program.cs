@@ -1,11 +1,17 @@
 ﻿namespace ResultPatternApp;
 
-class Program
+internal abstract class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
-        var bank = new BankTransfer(200);
-        var transfer = bank.TryWithdraw(210);
-        transfer.CheckResult();
+        var bank = new BankTransfer();
+
+        var result = bank.TryOpenAccount(200)
+            .Bind(x => x.TryWithdraw(300))
+            .Match(success => "Transfer Completed",
+                errors =>
+                    $"Transfer Failed {string.Join(Environment.NewLine, errors)}");
+
+        Console.WriteLine(result);
     }
 }
