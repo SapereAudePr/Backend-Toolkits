@@ -4,23 +4,21 @@ public class BankTransfer(decimal balance)
 {
     private decimal _balance = balance;
 
-    public bool TryWithdraw(decimal amount, out string reason)
+    public Result TryWithdraw(decimal amount)
     {
         if (amount <= 0)
         {
-            reason = "Amount can not be equal or lower to 0";
-            return false;
+            return Result.Failure("amount", "There's not enough balance");
         }
 
         if (amount > _balance)
         {
-            reason = $"Withdraw failed: requested amount {amount:C}, but the available balance is {_balance:C}.";
-            return false;
+            return Result.Failure("amount",
+                $"Withdraw failed: requested amount {amount:C}, but the available balance is {_balance:C}.");
         }
 
         _balance -= amount;
         Console.WriteLine($"Withdraw amount {amount} and the remaining balance is {_balance}");
-        reason = string.Empty;
-        return true;
+        return Result.Success();
     }
 }

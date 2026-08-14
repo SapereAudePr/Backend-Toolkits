@@ -5,9 +5,7 @@ class Program
     static void Main(string[] args)
     {
         var bank = new BankTransfer(200);
-        if (!bank.TryWithdraw(190, out var reason))
-        {
-            Console.WriteLine(reason);
-        }
+        var transfer = bank.TryWithdraw(210);
+        transfer.CheckResult();
     }
 }
