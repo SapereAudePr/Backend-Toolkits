@@ -1,0 +1,43 @@
+using Application.Common;
+using Application.Services;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Web.Endpoints;
+
+namespace Web;
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddOpenApi();
+
+        builder.Services.AddDbContext<UserDbContext>(options =>
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddScoped<IApplicationDbContext>(
+            sp => sp.GetRequiredService<UserDbContext>());
+
+        builder.Services.AddScoped<IUserService, UserService>();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.MapOpenApi();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapUserEndpoints();
+
+        app.Run();
+    }
+}
