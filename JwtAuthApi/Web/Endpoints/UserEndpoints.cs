@@ -1,4 +1,6 @@
-﻿using Application.Services;
+﻿using Application.DTOs;
+using Application.Services;
+using Web.Extensions;
 
 namespace Web.Endpoints;
 
@@ -9,21 +11,33 @@ public static class UserEndpoints
         var group = app.MapGroup("/api/user")
             .WithTags("user");
 
+        group.MapGet("", GetUsers);
         group.MapGet("{id:int}", GetUser);
-        group.MapGet("getUsers/", GetUsers);
+        group.MapPost("", CreateUser);
 
         return app;
     }
 
     //TODO: Write endpoints
 
-    private static IResult GetUsers(IUserService service)
+    private static async Task<IResult> GetUsers(IUserService service)
     {
-        return Results.Ok();
+        var users = await service.GetUsers();
+
+        return users.ToHttpResult();
     }
 
-    private static IResult GetUser(IUserService service, int id)
+    private static async Task<IResult> GetUser(IUserService service, int id)
     {
-        return Results.Ok();
+        var user = await service.GetUser(id);
+
+        return user.ToHttpResult();
+    }
+
+    private static async Task<IResult> CreateUser(IUserService service, CreateUserDto userDto)
+    {
+        var user = await service.CreateUser(userDto);
+
+        return user.ToCreatedResult(x => $"api/user/{x.Id}");
     }
 }
