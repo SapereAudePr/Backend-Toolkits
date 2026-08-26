@@ -14,6 +14,7 @@ public static class UserEndpoints
         group.MapGet("", GetUsers);
         group.MapGet("{id:int}", GetUser);
         group.MapPost("", CreateUser);
+        group.MapDelete("{id:int}", DeleteUser);
 
         return app;
     }
@@ -38,6 +39,13 @@ public static class UserEndpoints
     {
         var user = await service.CreateUser(userDto);
 
-        return user.ToCreatedResult(x => $"api/user/{x.Id}");
+        return user.ToCreatedResult(x => $"/api/user/{x.Id}");
+    }
+
+    private static async Task<IResult> DeleteUser(IUserService service, int id)
+    {
+        var user = await service.DeleteUser(id);
+
+        return user.ToHttpResult();
     }
 }

@@ -20,9 +20,11 @@ public class Result<T>
         Status = status;
     }
 
-    public static Result<T> Success(T value) => new(value, ResultStatus.Ok, isSuccess: true);
+    public static Result<T> Success(
+        T value, ResultStatus status = ResultStatus.Ok) => new(value, status, isSuccess: true);
 
-    public static Result<T> Failure(IReadOnlyCollection<ErrorMessage> errorMessages, ResultStatus status) =>
+    public static Result<T> Failure(
+        IReadOnlyCollection<ErrorMessage> errorMessages, ResultStatus status) =>
         new(default!, status, errorMessages.ToList(), false);
 
     public Result<TResult> Bind<TResult>(Func<T, Result<TResult>> next) =>
@@ -39,5 +41,6 @@ public enum ResultStatus
     ValidationFailure,
     NotFound,
     Conflict,
-    InternalError
+    InternalError,
+    Deleted
 }

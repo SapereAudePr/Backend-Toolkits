@@ -49,4 +49,20 @@ public class UserService(IApplicationDbContext dbContext) : IUserService
 
         return Result<UserDto>.Success(user.ToDto());
     }
+
+    public async Task<Result<UserDto>> DeleteUser(int id)
+    {
+        var user = await dbContext.Users.FindAsync(id);
+        if (user is null)
+            return Result<UserDto>.Failure(
+            [
+                new ErrorMessage
+                    ("Id", "User could not found")
+            ], ResultStatus.NotFound);
+
+        dbContext.Users.Remove(user);
+        await dbContext.SaveChangesAsync();
+
+        return Result<UserDto>.Success(user.ToDto(), ResultStatus.Deleted);
+    }
 }
