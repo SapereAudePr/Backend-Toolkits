@@ -12,7 +12,7 @@ public class GlobalExceptionHandler(
         Exception ex,
         CancellationToken ct)
     {
-        logger.LogError(ex, "An unhandled exception occurred: {ExMessage}", ex.Message);
+        logger.LogError(ex, "An unhandled exception occurred:" + " {ExMessage}", ex.Message);
 
         var (statusCode, title) = MapException(ex);
 
@@ -21,7 +21,11 @@ public class GlobalExceptionHandler(
             Status = statusCode,
             Title = title,
             Detail = env.IsDevelopment() ? ex.ToString() : "An unexpected error occurred",
-            Instance = context.Request.Path
+            Instance = context.Request.Path,
+            Extensions =
+            {
+                ["traceId"] = context.TraceIdentifier
+            }
         };
 
         context.Response.StatusCode = statusCode;
