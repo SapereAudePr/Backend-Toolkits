@@ -3,6 +3,7 @@ using Application.Services;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Web.Endpoints;
+using Web.Middleware;
 
 namespace Web;
 
@@ -20,8 +21,10 @@ public class Program
             options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddScoped<IApplicationDbContext>(
-            sp => sp.GetRequiredService<UserDbContext>());
+        builder.Services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<UserDbContext>());
+
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
 
         builder.Services.AddScoped<IUserService, UserService>();
 
@@ -31,6 +34,8 @@ public class Program
         {
             app.MapOpenApi();
         }
+
+        app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
 
