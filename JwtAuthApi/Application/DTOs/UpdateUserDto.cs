@@ -2,6 +2,6 @@
 
 public class UpdateUserDto
 {
-    public string Name { get; }
-    public string Password { get; }
+    public string Name { get; set; } = null!;
+    public string Password { get; set; } = null!;
 }

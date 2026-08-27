@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
-// TODO: Write Validation and use it here
-
 public class UserService(IApplicationDbContext dbContext) : IUserService
 {
     public async Task<Result<List<UserDto>>> GetUsers()
@@ -48,6 +46,59 @@ public class UserService(IApplicationDbContext dbContext) : IUserService
         await dbContext.SaveChangesAsync();
 
         return Result<UserDto>.Success(user.ToDto());
+    }
+
+    public async Task<Result<UserDto>> UpdateUser(int id, UpdateUserDto userDto)
+    {
+        var user = await dbContext.Users.FindAsync(id);
+        if (user is null)
+            return Result<UserDto>.Failure(
+                [
+                    new ErrorMessage
+                        ("id", $"User could not found with Id: {id}")
+                ],
+                ResultStatus.NotFound);
+
+        var validation = UserValidation.ValidateUserUpdate(userDto);
+        if (!validation.IsValid)
+            return Result<UserDto>.Failure(validation.Errors.Select(x =>
+                new ErrorMessage(x.Field, x.Message
+                )).ToList(), ResultStatus.ValidationFailure);
+
+        user.ChangeName(userDto.Name);
+        user.ChangePassword(userDto.Password);
+
+        await dbContext.SaveChangesAsync();
+
+        return Result<UserDto>.Success(user.ToDto());
+    }
+
+    public async Task<Result<UserDto>> PatchUser(int id, PatchUserDto userDto)
+    {
+        var userToUpdate = await dbContext.Users.FindAsync(id);
+        if (userToUpdate is null)
+            return Result<UserDto>.Failure(
+                [
+                    new ErrorMessage
+                        ("id", $"User could not found with Id: {id}")
+                ],
+                ResultStatus.NotFound);
+
+        var validation = UserValidation.ValidateUserPatch(userDto);
+        if (!validation.IsValid)
+            return Result<UserDto>.Failure(
+                validation.Errors.Select
+                    (x => new ErrorMessage(x.Field, x.Message)).ToList(),
+                ResultStatus.ValidationFailure);
+
+        if (userDto.Name is not null)
+            userToUpdate.ChangeName(userDto.Name);
+        if (userDto.Password is not null)
+            userToUpdate.ChangePassword(userDto.Password);
+
+        await dbContext.SaveChangesAsync();
+
+        return Result<UserDto>.Success(userToUpdate.ToDto());
     }
 
     public async Task<Result<UserDto>> DeleteUser(int id)

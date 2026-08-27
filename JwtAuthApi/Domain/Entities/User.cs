@@ -35,7 +35,7 @@ public class User
 
     public string ChangePassword(string password)
     {
-        Password = password.CheckNullOrWhiteSpace().MinLength(8).MaxLength(40);
+        Password = password.CheckNullOrWhiteSpace().MinLength(8).MaxLength(100);
 
         return password;
     }
