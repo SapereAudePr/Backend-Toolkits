@@ -1,13 +1,18 @@
 ﻿using Application.Common;
+using Application.Common.Interfaces;
 using Application.DTOs;
 using Application.Mappings;
 using Application.Validation.Validate;
 using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
-public class UserService(IApplicationDbContext dbContext) : IUserService
+public class UserService(
+    IApplicationDbContext dbContext,
+    IPasswordHasher hasher) :
+    IUserService
 {
     public async Task<Result<List<UserDto>>> GetUsers()
     {
@@ -40,7 +45,9 @@ public class UserService(IApplicationDbContext dbContext) : IUserService
             return Result<UserDto>.Failure(errors, ResultStatus.ValidationFailure);
         }
 
-        var user = userDto.ToDomain();
+        var hashedPassword = hasher.Hash(userDto.Password);
+
+        var user = new User(userDto.Name, hashedPassword, userDto.CreatedBy);
 
         await dbContext.Users.AddAsync(user);
         await dbContext.SaveChangesAsync();
@@ -66,7 +73,7 @@ public class UserService(IApplicationDbContext dbContext) : IUserService
                 )).ToList(), ResultStatus.ValidationFailure);
 
         user.ChangeName(userDto.Name);
-        user.ChangePassword(userDto.Password);
+        user.ChangePassword(hasher.Hash(userDto.Password));
 
         await dbContext.SaveChangesAsync();
 
@@ -94,7 +101,7 @@ public class UserService(IApplicationDbContext dbContext) : IUserService
         if (userDto.Name is not null)
             userToUpdate.ChangeName(userDto.Name);
         if (userDto.Password is not null)
-            userToUpdate.ChangePassword(userDto.Password);
+            userToUpdate.ChangePassword(hasher.Hash(userDto.Password));
 
         await dbContext.SaveChangesAsync();
 

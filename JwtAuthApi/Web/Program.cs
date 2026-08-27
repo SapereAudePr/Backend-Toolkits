@@ -1,6 +1,9 @@
 using Application.Common;
+using Application.Common.Interfaces;
+using Application.Security;
 using Application.Services;
 using Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Endpoints;
 using Web.Middleware;
@@ -27,6 +30,8 @@ public class Program
         builder.Services.AddProblemDetails();
 
         builder.Services.AddScoped<IUserService, UserService>();
+
+        builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         var app = builder.Build();
 
