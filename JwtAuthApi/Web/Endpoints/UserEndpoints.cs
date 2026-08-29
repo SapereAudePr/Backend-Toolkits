@@ -21,9 +21,10 @@ public static class UserEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetUsers(IUserService service)
+    private static async Task<IResult> GetUsers(
+        IUserService service, [AsParameters]UserQueryParameters parameters)
     {
-        var users = await service.GetUsers();
+        var users = await service.GetUsers(parameters);
 
         return users.ToHttpResult();
     }

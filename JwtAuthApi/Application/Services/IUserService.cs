@@ -5,7 +5,7 @@ namespace Application.Services;
 
 public interface IUserService
 {
-    public Task<Result<List<UserDto>>> GetUsers();
+    public Task<Result<PagedResult<UserDto>>> GetUsers(UserQueryParameters parameters);
     public Task<Result<UserDto>> GetUser(int id);
     public Task<Result<UserDto>> CreateUser(CreateUserDto userDto);
     public Task<Result<UserDto>> UpdateUser(int id, UpdateUserDto userDto);

@@ -14,11 +14,43 @@ public class UserService(
     IPasswordHasher hasher) :
     IUserService
 {
-    public async Task<Result<List<UserDto>>> GetUsers()
+    public async Task<Result<PagedResult<UserDto>>> GetUsers(UserQueryParameters parameters)
     {
-        var users = await dbContext.Users.ToListAsync();
+        var query = dbContext.Users.AsNoTracking().AsQueryable();
 
-        return Result<List<UserDto>>.Success(users.ToDto());
+        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        {
+            var term = parameters.SearchTerm.Trim();
+            query = query.Where(u =>
+                EF.Functions.Like(u.Name, $"%{term}%"));
+        }
+
+        query = parameters.SortBy?.Trim().ToLower() switch
+        {
+            "name" => parameters.SortDescending
+                ? query.OrderByDescending(u => u.Name)
+                : query.OrderBy(u => u.Name),
+            _ => parameters.SortDescending
+                ? query.OrderByDescending(u => u.Id)
+                : query.OrderBy(u => u.Id)
+        };
+
+        var totalCount = await query.CountAsync();
+
+        var page = parameters.NormalizedPage;
+        var pageSize = parameters.NormalizedPageSize;
+
+        var users = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var result = new PagedResult<UserDto>
+        {
+            Items = users.ToDto(),
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
+
+        return Result<PagedResult<UserDto>>.Success(result);
     }
 
     public async Task<Result<UserDto>> GetUser(int id)
