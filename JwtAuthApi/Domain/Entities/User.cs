@@ -33,6 +33,7 @@ public class User
         return Name;
     }
 
+    // Password is not hashed, users created by domain will be plaintext in db
     public string ChangePassword(string password)
     {
         Password = password.CheckNullOrWhiteSpace().MinLength(8).MaxLength(100);
