@@ -43,7 +43,7 @@ public class Program
         app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
-
+        
         app.UseAuthorization();
 
         app.MapUserEndpoints();

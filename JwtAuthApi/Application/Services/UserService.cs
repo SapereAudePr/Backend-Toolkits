@@ -25,12 +25,14 @@ public class UserService(
                 EF.Functions.Like(u.Name, $"%{term}%"));
         }
 
+        var normalizedSortDescending = parameters.NormalizedSortDescending;
+
         query = parameters.SortBy?.Trim().ToLower() switch
         {
-            "name" => parameters.SortDescending
+            "name" => normalizedSortDescending
                 ? query.OrderByDescending(u => u.Name)
                 : query.OrderBy(u => u.Name),
-            _ => parameters.SortDescending
+            _ => normalizedSortDescending
                 ? query.OrderByDescending(u => u.Id)
                 : query.OrderBy(u => u.Id)
         };
