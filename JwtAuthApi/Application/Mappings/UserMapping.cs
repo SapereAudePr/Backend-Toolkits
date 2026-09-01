@@ -18,6 +18,6 @@ public static class UserMapping
 
     public static User ToDomain(this CreateUserDto userDto) => new(
         name: userDto.Name,
-        password: userDto.Password,
+        hashedPassword: userDto.Password,
         createdBy: userDto.CreatedBy);
 }

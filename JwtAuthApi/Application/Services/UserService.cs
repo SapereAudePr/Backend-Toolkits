@@ -107,7 +107,7 @@ public class UserService(
                 )).ToList(), ResultStatus.ValidationFailure);
 
         user.ChangeName(userDto.Name);
-        user.ChangePassword(hasher.Hash(userDto.Password));
+        user.SetHashedPassword(hasher.Hash(userDto.Password));
 
         await dbContext.SaveChangesAsync();
 
@@ -135,7 +135,7 @@ public class UserService(
         if (userDto.Name is not null)
             userToUpdate.ChangeName(userDto.Name);
         if (userDto.Password is not null)
-            userToUpdate.ChangePassword(hasher.Hash(userDto.Password));
+            userToUpdate.SetHashedPassword(hasher.Hash(userDto.Password));
 
         await dbContext.SaveChangesAsync();
 

@@ -8,7 +8,7 @@ public class User
 
     public string Name { get; private set; } = null!;
 
-    public string Password { get; private set; } = null!;
+    public string HashedPassword { get; private set; } = null!;
 
     public DateTimeOffset CreationTime { get; init; }
 
@@ -18,10 +18,10 @@ public class User
     {
     }
 
-    public User(string name, string password, string createdBy)
+    public User(string name, string hashedPassword, string createdBy)
     {
         Name = ChangeName(name);
-        Password = ChangePassword(password);
+        HashedPassword = SetHashedPassword(hashedPassword);
         CreationTime = DateTimeOffset.UtcNow;
         CreatedBy = ChangeCreator(createdBy);
     }
@@ -32,13 +32,15 @@ public class User
 
         return Name;
     }
-
-    // Password is not hashed, users created by domain will be plaintext in db
-    public string ChangePassword(string password)
+    
+    // Password has to sent as hashed. This class can not hash password thus there's no way
+    // of creating a user by domain with hashed password
+    // I'll maybe move IPasswordHasher to Domain or find another solution
+    public string SetHashedPassword(string hashedPassword)
     {
-        Password = password.CheckNullOrWhiteSpace().MinLength(8).MaxLength(100);
+        HashedPassword = hashedPassword.CheckNullOrWhiteSpace().MaxLength(100);
 
-        return password;
+        return hashedPassword;
     }
 
     public string ChangeCreator(string name)
