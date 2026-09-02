@@ -36,16 +36,16 @@ public class UserValidation
             .MinLength(8)
             .MaxLength(100)
             .Validate();
-    
-    public static ValidationResult ValidateUserPatch(PatchUserDto userDto)
-        => new Validator<PatchUserDto>(userDto)
+
+    public static ValidationResult ValidateUserPatch(PatchUserDto userDto) =>
+        new Validator<PatchUserDto>(userDto)
             .RuleFor("Name", x => x.Name)
-            .NotNull()
+            .When(x => x.Name is not null)
             .NotEmpty()
             .MinLength(2)
             .MaxLength(40)
             .RuleFor("Password", x => x.Password)
-            .NotNull()
+            .When(x => x.Password is not null)
             .NotEmpty()
             .MinLength(8)
             .MaxLength(100)
