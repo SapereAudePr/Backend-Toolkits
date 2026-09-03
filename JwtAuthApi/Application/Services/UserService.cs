@@ -132,6 +132,14 @@ public class UserService(
                     (x => new ErrorMessage(x.Field, x.Message)).ToList(),
                 ResultStatus.ValidationFailure);
 
+        if (userDto.Name is null && userDto.Password is null)
+            return Result<UserDto>.Failure(
+                [
+                    new ErrorMessage("",
+                        "At least one property must be provided")
+                ],
+                ResultStatus.ValidationFailure);
+
         if (userDto.Name is not null)
             userToUpdate.ChangeName(userDto.Name);
         if (userDto.Password is not null)

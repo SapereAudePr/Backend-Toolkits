@@ -1,8 +1,3 @@
 ﻿namespace Application.DTOs;
 
-public class CreateUserDto
-{
-    public string Name { get; }
-    public string Password { get; }
-    public string CreatedBy { get; }
-}
+public record CreateUserDto(string Name, string Password, string CreatedBy);

@@ -3,7 +3,6 @@ using Application.Common.Interfaces;
 using Application.Security;
 using Application.Services;
 using Infrastructure;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Endpoints;
 using Web.Middleware;
@@ -29,9 +28,11 @@ public class Program
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
 
+        builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
         builder.Services.AddScoped<IUserService, UserService>();
 
-        builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
 
         var app = builder.Build();
 
@@ -43,11 +44,13 @@ public class Program
         app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
-        
+
         app.UseAuthorization();
 
-        app.MapUserEndpoints();
+        app.MapAuthEndpoints();
 
+        app.MapUserEndpoints();
+        
         app.Run();
     }
 }

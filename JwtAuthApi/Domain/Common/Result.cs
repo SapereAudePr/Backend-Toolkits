@@ -41,5 +41,6 @@ public enum ResultStatus
     ValidationFailure,
     NotFound,
     Conflict,
-    Deleted
+    Deleted,
+    Unauthorized
 }

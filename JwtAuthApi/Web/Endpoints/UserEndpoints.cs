@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application.Common.Interfaces;
+using Application.DTOs;
 using Application.Services;
 using Web.Extensions;
 

@@ -15,6 +15,7 @@ public static class ResultExtensions
                 ResultStatus.NotFound => Results.NotFound(errors),
                 ResultStatus.Conflict => Results.Conflict(errors),
                 ResultStatus.ValidationFailure => Results.BadRequest(errors),
+                ResultStatus.Unauthorized => Results.Unauthorized(),
                 _ => Results.Problem(statusCode: 500)
             });
 
