@@ -5,5 +5,5 @@ namespace Application.Common.Interfaces;
 
 public interface IAuthService
 {
-    Task<Result<bool>> Login(LoginDto dto);
+    Task<Result<UserDto>> Login(LoginDto dto);
 }

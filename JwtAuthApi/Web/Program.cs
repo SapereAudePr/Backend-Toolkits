@@ -3,6 +3,7 @@ using Application.Common.Interfaces;
 using Application.Security;
 using Application.Services;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Web.Endpoints;
 using Web.Middleware;
@@ -14,6 +15,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
 
         builder.Services.AddAuthorization();
 
@@ -45,12 +54,13 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapAuthEndpoints();
 
         app.MapUserEndpoints();
-        
+
         app.Run();
     }
 }
