@@ -19,30 +19,18 @@ public static class AuthEndpoints
     }
 
     private static async Task<IResult> Login(IAuthService service,
-        HttpContext context, LoginDto dto)
+        ITokenService tokenService, LoginDto dto)
     {
         var result = await service.Login(dto);
 
         var user = result.Match(onSuccess: userDto => userDto, onFailure:
             _ => (UserDto?)null);
-
         if (user is null)
             return result.ToHttpResult();
 
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, user.Name)
-        };
+        var token = tokenService.GenerateToken(user);
 
-        var identity = new ClaimsIdentity(claims,
-            CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-
-        await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-            principal);
-
-        return Results.Ok();
+        return Results.Ok(new LoginResponseDto{Token = token});
     }
     
     private static async Task<IResult> Logout(HttpContext context)

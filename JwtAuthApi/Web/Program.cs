@@ -16,14 +16,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-            });
-
         builder.Services.AddAuthorization();
 
         builder.Services.AddOpenApi();
@@ -38,6 +30,8 @@ public class Program
         builder.Services.AddProblemDetails();
 
         builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+        builder.Services.AddSingleton<ITokenService, TokenService>();
 
         builder.Services.AddScoped<IUserService, UserService>();
 
@@ -54,7 +48,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthentication();
+        // app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapAuthEndpoints();
