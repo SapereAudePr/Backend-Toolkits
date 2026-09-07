@@ -1,10 +1,12 @@
+using System.Text;
 using Application.Common;
 using Application.Common.Interfaces;
 using Application.Security;
 using Application.Services;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Web.Endpoints;
 using Web.Middleware;
 
@@ -15,6 +17,28 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        var jwtSection = builder.Configuration.GetSection("Jwt");
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtSection["Issuer"],
+
+                    ValidateAudience = true,
+                    ValidAudience = jwtSection["Audience"],
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(jwtSection["SigningKey"]!)),
+                    
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
         builder.Services.AddAuthorization();
 
@@ -48,7 +72,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        // app.UseAuthentication();
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapAuthEndpoints();
