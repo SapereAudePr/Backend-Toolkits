@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Application.Common.Interfaces;
 using Application.DTOs;
@@ -10,7 +11,7 @@ namespace Application.Security;
 
 public class TokenService(IConfiguration conf) : ITokenService
 {
-    public string GenerateToken(UserDto dto)
+    public string GenerateAccessToken(UserDto dto)
     {
         var claims = new List<Claim>
         {
@@ -33,4 +34,10 @@ public class TokenService(IConfiguration conf) : ITokenService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public string GenerateRefreshToken() =>
+        Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+    public string HashToken(string rawToken) =>
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(rawToken)));
 }

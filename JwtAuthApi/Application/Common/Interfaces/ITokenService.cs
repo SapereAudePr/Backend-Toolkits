@@ -4,5 +4,7 @@ namespace Application.Common.Interfaces;
 
 public interface ITokenService
 {
-    string GenerateToken(UserDto dto);
+    string GenerateAccessToken(UserDto dto);
+    string GenerateRefreshToken();
+    string HashToken(string rawToken);
 }

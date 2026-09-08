@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
+﻿using Application.Common;
 using Application.Common.Interfaces;
 using Application.DTOs;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Web.Extensions;
 
 namespace Web.Endpoints;
@@ -15,11 +17,13 @@ public static class AuthEndpoints
         group.MapPost("login", Login);
         group.MapPost("logout", async context => await Logout(context));
         group.MapGet("whoami", WhoAmI);
+        group.MapPost("refresh", Refresh);
         return app;
     }
 
     private static async Task<IResult> Login(IAuthService service,
-        ITokenService tokenService, LoginDto dto)
+        ITokenService tokenService, IApplicationDbContext dbContext,
+        LoginDto dto)
     {
         var result = await service.Login(dto);
 
@@ -28,11 +32,20 @@ public static class AuthEndpoints
         if (user is null)
             return result.ToHttpResult();
 
-        var token = tokenService.GenerateToken(user);
+        var accessToken = tokenService.GenerateAccessToken(user);
+        var rawRefreshToken = tokenService.GenerateRefreshToken();
+        var hashedRefreshToken = tokenService.HashToken(rawRefreshToken);
 
-        return Results.Ok(new LoginResponseDto{Token = token});
+        var refreshToken = new RefreshToken(
+            hashedRefreshToken, user.Id, expiresAt: DateTimeOffset.UtcNow.AddDays(7));
+
+        await dbContext.RefreshTokens.AddAsync(refreshToken);
+        await dbContext.SaveChangesAsync();
+
+        return Results.Ok(new AuthResponseDto
+            { AccessToken = accessToken, RefreshToken = rawRefreshToken });
     }
-    
+
     private static async Task<IResult> Logout(HttpContext context)
     {
         await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -42,8 +55,47 @@ public static class AuthEndpoints
 
     private static IResult WhoAmI(HttpContext context)
     {
-        var claims = context.User.Claims.Select(c => new { c.Type, c.Value });
+        var claims = context.User.Claims.Select(c =>
+            new { c.Type, c.Value });
 
         return Results.Ok(claims);
+    }
+
+    private static async Task<IResult> Refresh(ITokenService service, IApplicationDbContext dbContext,
+        RefreshRequestDto dto)
+    {
+        var hashedToken = service.HashToken(dto.RefreshToken);
+
+        var storedToken = await dbContext.RefreshTokens.FirstOrDefaultAsync(x =>
+            x.TokenHash == hashedToken);
+
+        if (storedToken is null || !storedToken.IsActive)
+            return Results.Unauthorized();
+
+        var user = await dbContext.Users.AsNoTracking().Where(u =>
+                u.Id == storedToken.UserId)
+            .Select(u => new UserDto { Id = u.Id, Name = u.Name })
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+            return Results.Unauthorized();
+
+        storedToken.Revoke();
+
+        var accessToken = service.GenerateAccessToken(user);
+        var rawRefreshToken = service.GenerateRefreshToken();
+        var hashedRefreshToken = service.HashToken(rawRefreshToken);
+
+        var newRefreshToken = new RefreshToken(hashedRefreshToken, user.Id,
+            DateTimeOffset.UtcNow.AddDays(7));
+
+        await dbContext.RefreshTokens.AddAsync(newRefreshToken);
+        await dbContext.SaveChangesAsync();
+
+        return Results.Ok(new AuthResponseDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = rawRefreshToken
+        });
     }
 }
