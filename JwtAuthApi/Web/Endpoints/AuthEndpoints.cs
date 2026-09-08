@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.Common.Interfaces;
 using Application.DTOs;
+using Application.Validation.Validate;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -61,15 +62,39 @@ public static class AuthEndpoints
         return Results.Ok(claims);
     }
 
+
+    //TODO:
+    // There's no protection for concurrency token(double-fired, token send at the same time)
     private static async Task<IResult> Refresh(ITokenService service, IApplicationDbContext dbContext,
         RefreshRequestDto dto)
     {
+        var validateToken = RefreshTokenValidation.ValidateRefreshToken(dto);
+        if (!validateToken.IsValid)
+            return Results.Unauthorized();
+
         var hashedToken = service.HashToken(dto.RefreshToken);
 
         var storedToken = await dbContext.RefreshTokens.FirstOrDefaultAsync(x =>
             x.TokenHash == hashedToken);
 
-        if (storedToken is null || !storedToken.IsActive)
+        if (storedToken is null)
+            return Results.Unauthorized();
+
+        if (storedToken.RevokedAt is not null)
+        {
+            var tokens = await dbContext.RefreshTokens.Where(t =>
+                    t.UserId == storedToken.UserId && t.RevokedAt == null)
+                .ToListAsync();
+
+            foreach (var t in tokens)
+                t.Revoke();
+
+            await dbContext.SaveChangesAsync();
+
+            return Results.Unauthorized();
+        }
+
+        if (!storedToken.IsActive)
             return Results.Unauthorized();
 
         var user = await dbContext.Users.AsNoTracking().Where(u =>
