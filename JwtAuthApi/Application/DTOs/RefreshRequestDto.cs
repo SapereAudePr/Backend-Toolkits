@@ -1,6 +1,8 @@
-﻿namespace Application.DTOs;
+﻿using System.Text.Json;
+
+namespace Application.DTOs;
 
 public class RefreshRequestDto
 {
-    public string RefreshToken { get; set; } = null!;
+    public JsonElement RefreshToken { get; set; }
 }

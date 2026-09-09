@@ -62,9 +62,8 @@ public static class AuthEndpoints
         return Results.Ok(claims);
     }
 
-
     //TODO:
-    // There's no protection for concurrency token(double-fired, token send at the same time)
+    // Periodic deletion for too old revoked tokens
     private static async Task<IResult> Refresh(ITokenService service, IApplicationDbContext dbContext,
         RefreshRequestDto dto)
     {
@@ -72,9 +71,11 @@ public static class AuthEndpoints
         if (!validateToken.IsValid)
             return Results.Unauthorized();
 
-        var hashedToken = service.HashToken(dto.RefreshToken);
+        var refreshTokenValue = dto.RefreshToken.GetString()!;
 
-        var storedToken = await dbContext.RefreshTokens.FirstOrDefaultAsync(x =>
+        var hashedToken = service.HashToken(refreshTokenValue);
+
+        var storedToken = await dbContext.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(x =>
             x.TokenHash == hashedToken);
 
         if (storedToken is null)
@@ -97,6 +98,25 @@ public static class AuthEndpoints
         if (!storedToken.IsActive)
             return Results.Unauthorized();
 
+        var rowsAffected = await dbContext.RefreshTokens.Where(t =>
+                t.Id == storedToken.Id && t.RevokedAt == null)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(
+                t => t.RevokedAt, DateTimeOffset.UtcNow));
+
+        if (rowsAffected == 0)
+        {
+            var tokens = await dbContext.RefreshTokens.Where(t =>
+                    t.UserId == storedToken.UserId && t.RevokedAt == null)
+                .ToListAsync();
+
+            foreach (var t in tokens)
+                t.Revoke();
+
+            await dbContext.SaveChangesAsync();
+
+            return Results.Unauthorized();
+        }
+
         var user = await dbContext.Users.AsNoTracking().Where(u =>
                 u.Id == storedToken.UserId)
             .Select(u => new UserDto { Id = u.Id, Name = u.Name })
@@ -104,8 +124,6 @@ public static class AuthEndpoints
 
         if (user is null)
             return Results.Unauthorized();
-
-        storedToken.Revoke();
 
         var accessToken = service.GenerateAccessToken(user);
         var rawRefreshToken = service.GenerateRefreshToken();

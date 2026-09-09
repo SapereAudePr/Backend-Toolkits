@@ -38,6 +38,8 @@ public class GlobalExceptionHandler(
     private static (int StatusCode, string Title) MapException(Exception ex) =>
         ex switch
         {
+            BadHttpRequestException =>
+                (StatusCodes.Status400BadRequest, "Malformed request"),
             ArgumentException =>
                 (StatusCodes.Status400BadRequest, "Invalid argument"),
             UnauthorizedAccessException =>
