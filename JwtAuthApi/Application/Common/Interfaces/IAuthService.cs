@@ -5,5 +5,6 @@ namespace Application.Common.Interfaces;
 
 public interface IAuthService
 {
-    Task<Result<UserDto>> Login(LoginDto dto);
+    Task<Result<AuthResponseDto>> LoginAsync(LoginDto dto);
+    Task<Result<AuthResponseDto>> RefreshAsync(RefreshRequestDto dto);
 }

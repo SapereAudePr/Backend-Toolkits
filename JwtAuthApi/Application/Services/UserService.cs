@@ -14,7 +14,7 @@ public class UserService(
     IPasswordHasher hasher) :
     IUserService
 {
-    public async Task<Result<PagedResult<UserDto>>> GetUsers(UserQueryParameters parameters)
+    public async Task<Result<PagedResult<UserDto>>> GetUsersAsync(UserQueryParameters parameters)
     {
         var query = dbContext.Users.AsNoTracking().AsQueryable();
 
@@ -55,7 +55,7 @@ public class UserService(
         return Result<PagedResult<UserDto>>.Success(result);
     }
 
-    public async Task<Result<UserDto>> GetUser(int id)
+    public async Task<Result<UserDto>> GetUserAsync(int id)
     {
         var user = await dbContext.Users.FindAsync(id);
         if (user is null)
@@ -67,7 +67,7 @@ public class UserService(
         return Result<UserDto>.Success(user.ToDto());
     }
 
-    public async Task<Result<UserDto>> CreateUser(CreateUserDto userDto)
+    public async Task<Result<UserDto>> CreateUserAsync(CreateUserDto userDto)
     {
         var validation = UserValidation.ValidateUserCreation(userDto);
         if (!validation.IsValid)
@@ -89,7 +89,7 @@ public class UserService(
         return Result<UserDto>.Success(user.ToDto());
     }
 
-    public async Task<Result<UserDto>> UpdateUser(int id, UpdateUserDto userDto)
+    public async Task<Result<UserDto>> UpdateUserAsync(int id, UpdateUserDto userDto)
     {
         var user = await dbContext.Users.FindAsync(id);
         if (user is null)
@@ -114,7 +114,7 @@ public class UserService(
         return Result<UserDto>.Success(user.ToDto());
     }
 
-    public async Task<Result<UserDto>> PatchUser(int id, PatchUserDto userDto)
+    public async Task<Result<UserDto>> PatchUserAsync(int id, PatchUserDto userDto)
     {
         var userToUpdate = await dbContext.Users.FindAsync(id);
         if (userToUpdate is null)
@@ -150,7 +150,7 @@ public class UserService(
         return Result<UserDto>.Success(userToUpdate.ToDto());
     }
 
-    public async Task<Result<UserDto>> DeleteUser(int id)
+    public async Task<Result<UserDto>> DeleteUserAsync(int id)
     {
         var user = await dbContext.Users.FindAsync(id);
         if (user is null)

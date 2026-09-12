@@ -1,11 +1,7 @@
-﻿using Application.Common;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.DTOs;
-using Application.Validation.Validate;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
 using Web.Extensions;
 
 namespace Web.Endpoints;
@@ -22,29 +18,11 @@ public static class AuthEndpoints
         return app;
     }
 
-    private static async Task<IResult> Login(IAuthService service,
-        ITokenService tokenService, IApplicationDbContext dbContext,
-        LoginDto dto)
+    private static async Task<IResult> Login(IAuthService service, LoginDto dto)
     {
-        var result = await service.Login(dto);
+        var result = await service.LoginAsync(dto);
 
-        var user = result.Match(onSuccess: userDto => userDto, onFailure:
-            _ => (UserDto?)null);
-        if (user is null)
-            return result.ToHttpResult();
-
-        var accessToken = tokenService.GenerateAccessToken(user);
-        var rawRefreshToken = tokenService.GenerateRefreshToken();
-        var hashedRefreshToken = tokenService.HashToken(rawRefreshToken);
-
-        var refreshToken = new RefreshToken(
-            hashedRefreshToken, user.Id, expiresAt: DateTimeOffset.UtcNow.AddDays(7));
-
-        await dbContext.RefreshTokens.AddAsync(refreshToken);
-        await dbContext.SaveChangesAsync();
-
-        return Results.Ok(new AuthResponseDto
-            { AccessToken = accessToken, RefreshToken = rawRefreshToken });
+        return result.ToHttpResult();
     }
 
     private static async Task<IResult> Logout(HttpContext context)
@@ -62,83 +40,10 @@ public static class AuthEndpoints
         return Results.Ok(claims);
     }
 
-    //TODO:
-    // Periodic deletion for too old revoked tokens
-    private static async Task<IResult> Refresh(ITokenService service, IApplicationDbContext dbContext,
-        RefreshRequestDto dto)
+    private static async Task<IResult> Refresh(IAuthService authService, RefreshRequestDto dto)
     {
-        var validateToken = RefreshTokenValidation.ValidateRefreshToken(dto);
-        if (!validateToken.IsValid)
-            return Results.Unauthorized();
+        var result = await authService.RefreshAsync(dto);
 
-        var refreshTokenValue = dto.RefreshToken.GetString()!;
-
-        var hashedToken = service.HashToken(refreshTokenValue);
-
-        var storedToken = await dbContext.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(x =>
-            x.TokenHash == hashedToken);
-
-        if (storedToken is null)
-            return Results.Unauthorized();
-
-        if (storedToken.RevokedAt is not null)
-        {
-            var tokens = await dbContext.RefreshTokens.Where(t =>
-                    t.UserId == storedToken.UserId && t.RevokedAt == null)
-                .ToListAsync();
-
-            foreach (var t in tokens)
-                t.Revoke();
-
-            await dbContext.SaveChangesAsync();
-
-            return Results.Unauthorized();
-        }
-
-        if (!storedToken.IsActive)
-            return Results.Unauthorized();
-
-        var rowsAffected = await dbContext.RefreshTokens.Where(t =>
-                t.Id == storedToken.Id && t.RevokedAt == null)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(
-                t => t.RevokedAt, DateTimeOffset.UtcNow));
-
-        if (rowsAffected == 0)
-        {
-            var tokens = await dbContext.RefreshTokens.Where(t =>
-                    t.UserId == storedToken.UserId && t.RevokedAt == null)
-                .ToListAsync();
-
-            foreach (var t in tokens)
-                t.Revoke();
-
-            await dbContext.SaveChangesAsync();
-
-            return Results.Unauthorized();
-        }
-
-        var user = await dbContext.Users.AsNoTracking().Where(u =>
-                u.Id == storedToken.UserId)
-            .Select(u => new UserDto { Id = u.Id, Name = u.Name })
-            .FirstOrDefaultAsync();
-
-        if (user is null)
-            return Results.Unauthorized();
-
-        var accessToken = service.GenerateAccessToken(user);
-        var rawRefreshToken = service.GenerateRefreshToken();
-        var hashedRefreshToken = service.HashToken(rawRefreshToken);
-
-        var newRefreshToken = new RefreshToken(hashedRefreshToken, user.Id,
-            DateTimeOffset.UtcNow.AddDays(7));
-
-        await dbContext.RefreshTokens.AddAsync(newRefreshToken);
-        await dbContext.SaveChangesAsync();
-
-        return Results.Ok(new AuthResponseDto
-        {
-            AccessToken = accessToken,
-            RefreshToken = rawRefreshToken
-        });
+        return result.ToHttpResult();
     }
 }
